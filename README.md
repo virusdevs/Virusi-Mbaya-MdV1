@@ -1,1 +1,3 @@
-# Virusi-Mbaya-MdV1
+### Virusi-Mbaya-Md
+
+- Session ID must start with: **Virusi~**
