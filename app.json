@@ -1,8 +1,8 @@
 
 {
-  "name": "gifted-md",
+  "name": "Virusi-md",
   "version": "5.0.0",
-  "description": "I am Gifted-Md WhatsApp MultiDevice Bot built in NodeJs to Enhance WhatsApp Communication experience",
+  "description": "I am Virusi-Md WhatsApp MultiDevice Bot built in NodeJs to Enhance WhatsApp Communication experience",
   "website": "https://session.giftedtech.my.id",
   "logo": "https://files.catbox.moe/52699c.jpg",
   "keywords": ["gifted-md", "giftedtech", "Gifted-Md"],
@@ -11,19 +11,19 @@
   "stack": "container",
   "env": {
     "SESSION_ID": {
-      "description": "Put your session-id here. Must Start with 'Gifted~'",
+      "description": "Put your session-id here. Must Start with 'Virusi~'",
       "required": true,
       "value": ""
     },  
     "MODE": {
       "description": "Set Mode  to 'public' or private. Default is 'public'",
       "required": false,
-      "value": "public"
+      "value": "private"
     },
     "OWNER_NAME": {
       "description": "Put Owner Name Here",
       "required": true,
-      "value": "Gifted Tech"
+      "value": "Virusi Tech"
     },
     "OWNER_NUMBER": {
       "description": "Put only one Owner Number Here ie 2547xxxxx",
@@ -113,7 +113,7 @@
     "BOT_NAME": {
       "description": "You can edit this but maintain font style for uniformity. Use 'Fonts Type Keyboard' for styles.",
       "required": true,
-      "value": "𝐆𝐈𝐅𝐓𝐄𝐃-𝐌𝐃"
+      "value": "VIRUSI-MD"
     },
     "BOT_PIC": {
       "description": "You can edit this but it must be a valid image url(link).",
