@@ -10,8 +10,8 @@
     "stop": "pm2 stop virusi",
     "restart": "pm2 restart virusi"
   },
-  "keywords": ["virusi-md", "whatsapp-bot", "vurusian"],
-  "author": "Vurusian",
+  "keywords": ["virusi-md", "whatsapp-bot", "virusian"],
+  "author": "Virusian",
   "license": "GNU",
   "dependencies": {
     "gifted-baileys": "npm:gifted-baileys@1.5.1",
@@ -89,7 +89,7 @@
       "url": "git+https://github.com/vurusian/virusi-md.git"
    },
    "bugs": {
-      "url": "https://github.com/vurusian/virusi-md/issues"
+      "url": "https://github.com/virusian/virusi-md/issues"
    },
-   "homepage": "https://github.com/vurusian/virusi-md#readme"
+   "homepage": "https://github.com/virusian/virusi-md#readme"
 }
