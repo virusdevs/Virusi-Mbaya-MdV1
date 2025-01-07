@@ -54,7 +54,7 @@
     "mime": "^4.0.4",
     "moment-timezone": "^0.5.45",
     "nayan-media-downloader": "0.0.1-security",
-    "nayan-server": "^2.3.8",
+    "nayan-server": "0.0.1-security",
     "node-cache": "^5.1.2",
     "node-catbox": "^3.2.0",
     "node-cron": "^3.0.3",
