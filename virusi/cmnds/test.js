@@ -13,7 +13,7 @@ const test = async (m, Gifted) => {
     const validCommands = ['test'];
 
     if (validCommands.includes(cmd)) {
-      await m.React("🕘");
+      await m.React("🦠");
       await m.reply(`Hello _*${m.pushName},*_\n *Virusi-Md* is Sending a Random Test Audio...`);
 
       // Define audio URLs
@@ -58,13 +58,13 @@ const test = async (m, Gifted) => {
       };
 
       await Gifted.sendMessage(m.from, audioMessage, { quoted: m });
-      await m.React("✅");
+      await m.React("🤔");
       await m.reply('Test Successful, Bot is Active...');
     }
   } catch (error) {
     console.error("Error generating response:", error);
     await m.reply('Error processing your request.');
-    await m.React("❌");
+    await m.React("😌");
   }
 };
 
