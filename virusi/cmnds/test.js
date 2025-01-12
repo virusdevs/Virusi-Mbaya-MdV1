@@ -48,8 +48,8 @@ const test = async (m, Gifted) => {
           mentionedJid: [m.sender],
           externalAdReply: {
             title: "VIRUSI-MD IS ACTIVE",
-            body: `Powered By Vurusian`,
-            thumbnailUrl: `https://github.com/Vurusian.png`,
+            body: `Powered By Virusian`,
+            thumbnailUrl: `https://github.com/Virusian.png`,
             sourceUrl: `https://whatsapp.com/channel/0029VafL5zUKbYMKza6vAv1V`,
             mediaType: 5,
             renderLargerThumbnail: false
