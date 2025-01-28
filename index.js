@@ -125,11 +125,7 @@ async function start() {
                 console.error('Error during auto reaction:', err);
             }
         });
-    } catch (error) {
-        console.error('Critical Error:', error);
-        process.exit(1);
-    }
-}
+   
 
 async function init() {
     if (fs.existsSync(credsPath)) {
