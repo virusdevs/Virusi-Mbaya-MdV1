@@ -9,32 +9,25 @@ import {
     useMultiFileAuthState,
 } from '@whiskeysockets/baileys';
 import { Handler, Callupdate, GroupUpdate } from './virusi/funcs/virusi4.js';
-import { Boom } from '@hapi/boom';
 import express from 'express';
 import pino from 'pino';
-import path from 'path'
-import { io } from 'socket.io-client'
 import fs from 'fs';
 import NodeCache from 'node-cache';
+import path from 'path';
 import chalk from 'chalk';
-import { writeFile } from 'fs/promises';
 import moment from 'moment-timezone';
 import axios from 'axios';
-import fetch from 'node-fetch';
-import * as os from 'os';
 import config from './set.cjs';
 import pkg from './lib/virusi5.cjs';
 const { emojis, doReact } = pkg;
-import http from 'http'; // Added for keep-alive
 
 const sessionName = "session";
 const app = express();
 const orange = chalk.bold.hex("#FFA500");
 const lime = chalk.bold.hex("#32CD32");
-let useQR;
-let isSessionPutted;
+let useQR = false;
 let initialConnection = true;
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 const MAIN_LOGGER = pino({
     timestamp: () => `,"time":"${new Date().toJSON()}"`
@@ -44,41 +37,53 @@ logger.level = "trace";
 
 const msgRetryCounterCache = new NodeCache();
 
-const store = makeInMemoryStore({
-    logger: pino().child({
-        level: 'silent',
-        stream: 'store'
-    })
-});
+const __filename = new URL(import.meta.url).pathname;
+const __dirname = path.dirname(__filename);
 
-// Baileys Connection Option
-async function start() {
+const sessionDir = path.join(__dirname, 'session');
+const credsPath = path.join(sessionDir, 'creds.json');
+
+if (!fs.existsSync(sessionDir)) {
+    fs.mkdirSync(sessionDir, { recursive: true });
+}
+
+async function downloadSessionData() {
     if (!config.SESSION_ID) {
-        useQR = false;
-        isSessionPutted = false;
-    } else {
-        useQR = false;
-        isSessionPutted = true;
+        console.error('Please add your session to SESSION_ID env !!');
+        return false;
     }
+    const sessdata = config.SESSION_ID.split("Virusi~")[1];
+    const url = `https://pastebin.com/raw/${sessdata}`;
+    try {
+        const response = await axios.get(url);
+        const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+        await fs.promises.writeFile(credsPath, data);
+        console.log("🌏BMW MD ONLINE🌏");
+        return true;
+    } catch (error) {
+       // console.error('Failed to download session data:', error);
+        return false;
+    }
+}
 
-    let { state, saveCreds } = await useMultiFileAuthState(sessionName);
-    let { version, isLatest } = await fetchLatestBaileysVersion();
-    console.log(chalk.red("VIRUSI CONNECTING TO WHATSAPP"));
-    console.log(chalk.green(`CHECKING WA VERSION v${version.join(".")}, isLatest: ${isLatest}`));
-
-    const Device = (os.platform() === 'win32') ? 'Windows' : (os.platform() === 'darwin') ? 'MacOS' : 'Linux';
-    const Matrix = makeWASocket({
-        version,
-        logger: pino({ level: 'silent' }),
-        printQRInTerminal: useQR,
-        browser: [Device, 'chrome', '121.0.6167.159'],
+async function start() {
+    try {
+        const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
+        const { version, isLatest } = await fetchLatestBaileysVersion();
+        console.log(`Bmw is running on v${version.join('.')}, isLatest: ${isLatest}`);
+        
+        const Matrix = makeWASocket({
+            version,
+            logger: pino({ level: 'silent' }),
+            printQRInTerminal: useQR,
+            browser: ["Bwm-xmd", "safari", "3.3"],
             auth: state,
             getMessage: async (key) => {
                 if (store) {
                     const msg = await store.loadMessage(key.remoteJid, key.id);
                     return msg.message || undefined;
                 }
-                return { conversation: "𝐕𝐈𝐑𝐔𝐒𝐈-𝐌𝐃 𝐕𝟐" };
+                return { conversation: "BEST WHATSAPP BOT MADE BY IBRAHIM ADAMS" };
             }
         });
 
@@ -90,8 +95,8 @@ async function start() {
                 }
             } else if (connection === 'open') {
                 if (initialConnection) {
-                    console.log(chalk.green("𝐕𝐈𝐑𝐔𝐒𝐈-𝐌𝐃 𝐕𝟐 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 ✅"));
-                    Matrix.sendMessage(Matrix.user.id, { text: `╭─────────────━┈⊷\n│ *ᴀɪ ɪs ᴄᴏɴɴᴇᴄᴛᴇᴅ*\n╰─────────────━┈⊷\n\n╭─────────────━┈⊷\n│🤖 ʙᴏᴛ ɴᴀᴍᴇ: *𝐕𝐈𝐑𝐔𝐒𝐈-𝐌𝐃 𝐕𝟐*\n│👨‍💻 ᴏᴡɴᴇʀ : *𝐕𝐈𝐑𝐔𝐒𝐈*\n╰─────────────━┈⊷\n\n*Join Whatsapp Channel For Updates*\n_https://whatsapp.com/channel/0029VaZuGSxEawdxZK9CzM0Y_` });
+                    console.log(chalk.green("BMW MD CONNECTED SUCCESSFULLY ✅"));
+                    Matrix.sendMessage(Matrix.user.id, { text: `╭─────────────━┈⊷\n│ *ᴀɪ ɪs ᴄᴏɴɴᴇᴄᴛᴇᴅ*\n╰─────────────━┈⊷\n\n╭─────────────━┈⊷\n│🤖 ʙᴏᴛ ɴᴀᴍᴇ: *ʙᴍᴡ ᴍᴅ*\n│👨‍💻 ᴏᴡɴᴇʀ : *sɪʀ ɪʙʀᴀʜɪᴍ*\n╰─────────────━┈⊷\n\n*Join Whatsapp Channel For Updates*\n_https://whatsapp.com/channel/0029VaZuGSxEawdxZK9CzM0Y_` });
                     initialConnection = false;
                 } else {
                     console.log(chalk.blue("Restarted Successfully...!."));
@@ -125,7 +130,11 @@ async function start() {
                 console.error('Error during auto reaction:', err);
             }
         });
-   
+    } catch (error) {
+        console.error('Critical Error:', error);
+        process.exit(1);
+    }
+}
 
 async function init() {
     if (fs.existsSync(credsPath)) {
@@ -147,14 +156,12 @@ async function init() {
 init();
 
 app.get('/', (req, res) => {
-    res.send('𝐕𝐈𝐑𝐔𝐒𝐈-𝐌𝐃 𝐕𝟐 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 ✅');
+    res.send('BMW MD CONNECTED SUCCESSFULLY ✅');
 });
 
 app.listen(PORT, () => {
-    console.log(`Virus daily users ${PORT}`);
+    console.log(`Bmw daily users ${PORT}`);
 });
-
-
 
 
 
