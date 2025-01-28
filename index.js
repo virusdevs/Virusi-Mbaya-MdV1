@@ -58,7 +58,7 @@ async function downloadSessionData() {
         const response = await axios.get(url);
         const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
         await fs.promises.writeFile(credsPath, data);
-        console.log("🌏BMW MD ONLINE🌏");
+        console.log("🦠 VIRUSI MD ONLINE🦠");
         return true;
     } catch (error) {
        // console.error('Failed to download session data:', error);
@@ -70,7 +70,7 @@ async function start() {
     try {
         const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
         const { version, isLatest } = await fetchLatestBaileysVersion();
-        console.log(`Bmw is running on v${version.join('.')}, isLatest: ${isLatest}`);
+        console.log(`Virusi-Md is running on v${version.join('.')}, isLatest: ${isLatest}`);
         
         const Matrix = makeWASocket({
             version,
@@ -83,7 +83,7 @@ async function start() {
                     const msg = await store.loadMessage(key.remoteJid, key.id);
                     return msg.message || undefined;
                 }
-                return { conversation: "BEST WHATSAPP BOT MADE BY IBRAHIM ADAMS" };
+                return { conversation: "BEST WHATSAPP BOT MADE BY VIRUSI 🦠 MBAYA" };
             }
         });
 
@@ -143,10 +143,10 @@ async function init() {
     } else {
         const sessionDownloaded = await downloadSessionData();
         if (sessionDownloaded) {
-            console.log("BMW MD RUNNING...⏳");
+            console.log("Vurusi MD RUNNING...🦠");
             await start();
         } else {
-            console.log("Session id error ❌");
+            console.log("Session id error 🤭");
             useQR = true;
             await start();
         }
@@ -156,7 +156,7 @@ async function init() {
 init();
 
 app.get('/', (req, res) => {
-    res.send('BMW MD CONNECTED SUCCESSFULLY ✅');
+    res.send('VIRUSI MD CONNECTED SUCCESSFULLY 🦠');
 });
 
 app.listen(PORT, () => {
