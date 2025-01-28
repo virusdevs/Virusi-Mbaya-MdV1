@@ -1,9 +1,13 @@
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 import dotenv from 'dotenv';
-dotenv.config(); 
-import { makeWASocket, Browsers, jidDecode, makeInMemoryStore, makeCacheableSignalKeyStore, fetchLatestBaileysVersion, DisconnectReason, useMultiFileAuthState, getAggregateVotesInPollMessage } from 'gifted-baileys';
+dotenv.config();
+
+import {
+    makeWASocket,
+    Browsers,
+    fetchLatestBaileysVersion,
+    DisconnectReason,
+    useMultiFileAuthState,
+} from '@whiskeysockets/baileys';
 import { Handler, Callupdate, GroupUpdate } from './virusi/funcs/virusi4.js';
 import { Boom } from '@hapi/boom';
 import express from 'express';
