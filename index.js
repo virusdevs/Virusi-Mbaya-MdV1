@@ -1,33 +1,36 @@
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import dotenv from 'dotenv';
-dotenv.config();
-
-import {
-    makeWASocket,
-    Browsers,
-    fetchLatestBaileysVersion,
-    DisconnectReason,
-    useMultiFileAuthState,
-} from '@whiskeysockets/baileys';
+dotenv.config(); 
+import { makeWASocket, Browsers, jidDecode, makeInMemoryStore, makeCacheableSignalKeyStore, fetchLatestBaileysVersion, DisconnectReason, useMultiFileAuthState, getAggregateVotesInPollMessage } from 'gifted-baileys';
 import { Handler, Callupdate, GroupUpdate } from './virusi/funcs/virusi4.js';
+import { Boom } from '@hapi/boom';
 import express from 'express';
 import pino from 'pino';
+import path from 'path'
+import { io } from 'socket.io-client'
 import fs from 'fs';
 import NodeCache from 'node-cache';
-import path from 'path';
 import chalk from 'chalk';
+import { writeFile } from 'fs/promises';
 import moment from 'moment-timezone';
 import axios from 'axios';
+import fetch from 'node-fetch';
+import * as os from 'os';
 import config from './set.cjs';
-import pkg from './lib/virusi5.cjss';
+import pkg from './lib/virusi5.cjs';
 const { emojis, doReact } = pkg;
+import http from 'http'; // Added for keep-alive
 
 const sessionName = "session";
 const app = express();
 const orange = chalk.bold.hex("#FFA500");
 const lime = chalk.bold.hex("#32CD32");
-let useQR = false;
+let useQR;
+let isSessionPutted;
 let initialConnection = true;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const MAIN_LOGGER = pino({
     timestamp: () => `,"time":"${new Date().toJSON()}"`
@@ -37,46 +40,34 @@ logger.level = "trace";
 
 const msgRetryCounterCache = new NodeCache();
 
-const __filename = new URL(import.meta.url).pathname;
-const __dirname = path.dirname(__filename);
+const store = makeInMemoryStore({
+    logger: pino().child({
+        level: 'silent',
+        stream: 'store'
+    })
+});
 
-const sessionDir = path.join(__dirname, 'session');
-const credsPath = path.join(sessionDir, 'creds.json');
-
-if (!fs.existsSync(sessionDir)) {
-    fs.mkdirSync(sessionDir, { recursive: true });
-}
-
-async function downloadSessionData() {
-    if (!config.SESSION_ID) {
-        console.error('Please add your session to SESSION_ID env !!');
-        return false;
-    }
-    const sessdata = config.SESSION_ID.split("Virusi~")[1];
-    const url = `https://pastebin.com/raw/${sessdata}`;
-    try {
-        const response = await axios.get(url);
-        const data = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
-        await fs.promises.writeFile(credsPath, data);
-        console.log("𝐕𝐈𝐑𝐔𝐒𝐈-𝐌𝐃 𝐕𝟐");
-        return true;
-    } catch (error) {
-       // console.error('Failed to download session data:', error);
-        return false;
-    }
-}
-
+// Baileys Connection Option
 async function start() {
-    try {
-        const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
-        const { version, isLatest } = await fetchLatestBaileysVersion();
-        console.log(`Bmw is running on v${version.join('.')}, isLatest: ${isLatest}`);
-        
-        const Matrix = makeWASocket({
-            version,
-            logger: pino({ level: 'silent' }),
-            printQRInTerminal: useQR,
-            browser: ["BWM-MD", "safari", "3.3"],
+    if (!config.SESSION_ID) {
+        useQR = false;
+        isSessionPutted = false;
+    } else {
+        useQR = false;
+        isSessionPutted = true;
+    }
+
+    let { state, saveCreds } = await useMultiFileAuthState(sessionName);
+    let { version, isLatest } = await fetchLatestBaileysVersion();
+    console.log(chalk.red("VIRUSI CONNECTING TO WHATSAPP"));
+    console.log(chalk.green(`CHECKING WA VERSION v${version.join(".")}, isLatest: ${isLatest}`));
+
+    const Device = (os.platform() === 'win32') ? 'Windows' : (os.platform() === 'darwin') ? 'MacOS' : 'Linux';
+    const Matrix = makeWASocket({
+        version,
+        logger: pino({ level: 'silent' }),
+        printQRInTerminal: useQR,
+        browser: [Device, 'chrome', '121.0.6167.159'],
             auth: state,
             getMessage: async (key) => {
                 if (store) {
