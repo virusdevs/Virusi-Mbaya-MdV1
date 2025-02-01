@@ -10,8 +10,8 @@
     "stop": "pm2 stop virusi",
     "restart": "pm2 restart virusi"
   },
-  "keywords": ["virusi-md", "whatsapp-bot", "virusian"],
-  "author": "Virusian",
+  "keywords": ["virusi-md", "whatsapp-bot", "virusdevs"],
+  "author": "Virusdevs",
   "license": "GNU",
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.5",
@@ -86,10 +86,10 @@
       },
    "repository": {
       "type": "git",
-      "url": "git+https://github.com/virusian/Virusi-Mbaya-MdV1.git"
+      "url": "git+https://github.com/virusdevs/Virusi-Mbaya-MdV1.git"
    },
    "bugs": {
-      "url": "https://github.com/virusian/virusi-md/issues"
+      "url": "https://github.com/virusdevs/virusi-md/issues"
    },
-   "homepage": "https://github.com/virusian/virusi-md#readme"
+   "homepage": "https://github.com/virusdevs/virusi-md#readme"
   }
